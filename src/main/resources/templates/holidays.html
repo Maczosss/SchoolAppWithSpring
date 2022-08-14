@@ -40,7 +40,7 @@
             <h3 class="title-style">Awesome Holidays</h3>
         </div>
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6" th:if="${festival}==true">
                 <h5 class="sub-title-timeline"><i class="fas fa-snowman"></i> Festival Holidays</h5>
                 <div class="timeline">
                     <div class="timeline">
@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-6 mt-lg-0 mt-4">
+            <div class="col-lg-6 mt-lg-0 mt-4" th:if="${federal}==true">
                 <h5 class="sub-title-timeline"><i class="fas fa-flag-usa"></i> Federal Holidays </h5>
                 <div class="timeline">
                     <div th:each="holiday : ${FEDERAL}" class="column">

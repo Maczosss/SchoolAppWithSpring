@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,11 @@ import java.util.stream.Collectors;
 public class HolidayController {
 
     @GetMapping("/holidays")
-    public String displayHolidays(Model model){
+    public String displayHolidays(@RequestParam(required = false) boolean federal,
+                                  @RequestParam(required = false) boolean festival, Model model) {
+
+        model.addAttribute("festival", festival);
+        model.addAttribute("federal", federal);
 
         List<Holiday> holidays = Arrays.asList(
                 new Holiday(" Jan 1 ", "New Years Day", Holiday.Type.FESTIVAL),
@@ -25,8 +30,8 @@ public class HolidayController {
                 new Holiday(" July 4 ", "Independence Day", Holiday.Type.FEDERAL),
                 new Holiday(" Sep 5 ", "Labor Day", Holiday.Type.FEDERAL),
                 new Holiday(" Nov 11 ", "Veterans Day", Holiday.Type.FEDERAL)
-                );
-        for( Holiday.Type type : Holiday.Type.values()){
+        );
+        for (Holiday.Type type : Holiday.Type.values()) {
             model.addAttribute(type.toString(),
                     (holidays.stream().filter(holiday -> holiday.getType().equals(type))
                             .collect(Collectors.toList())));
