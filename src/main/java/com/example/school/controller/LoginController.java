@@ -25,17 +25,23 @@ public class LoginController {
 
         String errorMessage = null;
 
-        errorMessage = error != null ? "Username or Password is incorrect!" : (logout != null ? "You have been successfully logged out!" : null);
+//        errorMessage = error != null ? "Username or Password is incorrect!" : (logout != null ? "You have been successfully logged out!" : null);
+        if (error != null) {
+            errorMessage = "Username or Password is incorrect!";
+        }
+        if (logout != null) {
+            errorMessage = "You have been successfully logged out!";
+        }
         model.addAttribute("errorMessage", errorMessage);
 
         return "login.html";
     }
 
-    @RequestMapping(value="/logout", method = RequestMethod.POST)
-    public String logoutPage (HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){
+        if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "redirect:/login?logout=true";
