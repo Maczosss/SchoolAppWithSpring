@@ -13,13 +13,17 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable().authorizeHttpRequests()
-                .mvcMatchers("/home").authenticated()
+                .mvcMatchers("/dashboard").authenticated()
+                .mvcMatchers("/home").permitAll()
                 .mvcMatchers("/holidays/**").permitAll()
                 .mvcMatchers("/contact").permitAll()
                 .mvcMatchers("/saveMsg").permitAll()
                 .mvcMatchers("/courses").permitAll()
                 .mvcMatchers("/about").permitAll()
-                .and().formLogin()
+                .mvcMatchers("/login").permitAll()
+                .and().formLogin().loginPage("/login")
+                .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll()
+                .and().logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true).permitAll()
                 .and().httpBasic();
 
 //        http.authorizeHttpRequests()
