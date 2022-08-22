@@ -1,35 +1,35 @@
 package com.example.school.service;
 
+import com.example.school.constants.SchoolConstants;
 import com.example.school.model.Contact;
+import com.example.school.repository.ContactRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Service
-//@RequestScope
-//@ApplicationScope
-@SessionScope
 public class ContactService {
 
-    int counter = 0;
+    @Autowired
+    private ContactRepository contactRepository;
 
     public ContactService() {
         System.out.println("ContactService Bean initialized");
     }
 
-    public boolean saveMessageDetails(Contact contact){
-        boolean isSaved = true;
-        //TODO Save data do database
-        log.info(contact.toString());
+    public boolean saveMessageDetails(Contact contact) {
+        boolean isSaved = false;
+        contact.setStatus(SchoolConstants.OPEN);
+        contact.setCreatedAt(LocalDateTime.now());
+        contact.setCreatedBy(SchoolConstants.ANONYMOUS);
+        int result = contactRepository.saveContactMsg(contact);
+        if (result > 0) {
+            isSaved = true;
+        }
         return isSaved;
-    }
-
-    public int getCounter() {
-        return counter;
-    }
-
-    public void setCounter(int counter) {
-        this.counter = counter;
     }
 }
