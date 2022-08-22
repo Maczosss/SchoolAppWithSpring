@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @Data
 public class Contact extends BaseEntity{
 
-    private String contactId;
+    private int contactId;
 
     @NotBlank(message = "Type Your name")
     @Size(min = 3, max = 50, message = "3-50 characters for name")
