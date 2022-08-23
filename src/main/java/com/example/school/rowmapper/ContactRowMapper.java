@@ -1,9 +1,7 @@
 package com.example.school.rowmapper;
 
-
 import com.example.school.model.Contact;
 import org.springframework.jdbc.core.RowMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
