@@ -13,7 +13,8 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().ignoringAntMatchers("/saveMsg")
-                .and().authorizeHttpRequests()
+                .ignoringAntMatchers("/h2-console/**")
+                .and().authorizeRequests()
                 .mvcMatchers("/dashboard").authenticated()
                 .mvcMatchers("/home").permitAll()
                 .mvcMatchers("/holidays/**").permitAll()
@@ -25,12 +26,10 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginPage("/login")
                 .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll()
                 .and().logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true).permitAll()
+                .and().authorizeRequests().antMatchers("/h2-console/**").permitAll()
                 .and().httpBasic();
 
-//        http.authorizeHttpRequests()
-//                .anyRequest().permitAll()
-//                .and().formLogin()
-//                .and().httpBasic();
+        http.headers().frameOptions().disable();
     }
 
     @Override
@@ -38,7 +37,7 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("user").password("123").roles("USER")
                 .and()
-                .withUser("admin").password("456").roles("ADMIN","USER")
+                .withUser("admin").password("456").roles("ADMIN")
                 .and()
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
