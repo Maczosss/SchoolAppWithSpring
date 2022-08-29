@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class HolidayController {
@@ -31,13 +32,20 @@ public class HolidayController {
                 case "festival" -> model.addAttribute("festival", true);
             }
         }
-        var holidays = holidaysRepository.findAllHolidays();
+        var holidays = holidaysRepository.findAll();
+        var holidayList = StreamSupport.stream(holidays.spliterator(), false).toList();
 
         for (Holiday.Type type : Holiday.Type.values()) {
             model.addAttribute(type.toString(),
-                    (holidays.stream().filter(holiday -> holiday.getType().equals(type))
+                    (holidayList.stream().filter(holiday -> holiday.getType().equals(type))
                             .collect(Collectors.toList())));
         }
+        //old
+//        for (Holiday.Type type : Holiday.Type.values()) {
+//            model.addAttribute(type.toString(),
+//                    (holidays.stream().filter(holiday -> holiday.getType().equals(type))
+//                            .collect(Collectors.toList())));
+//        }
         return "holidays.html";
     }
 }
