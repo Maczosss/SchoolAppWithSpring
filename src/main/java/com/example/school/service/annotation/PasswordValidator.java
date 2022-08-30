@@ -1,4 +1,4 @@
-package com.example.school.annotation;
+package com.example.school.service.annotation;
 
 import com.example.school.validations.PasswordStrengthValidator;
 
