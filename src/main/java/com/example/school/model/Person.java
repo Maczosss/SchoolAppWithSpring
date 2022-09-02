@@ -1,7 +1,7 @@
 package com.example.school.model;
 
-import com.example.school.service.annotation.FieldsValueMatch;
-import com.example.school.service.annotation.PasswordValidator;
+import com.example.school.annotation.FieldsValueMatch;
+import com.example.school.annotation.PasswordValidator;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
