@@ -1,6 +1,6 @@
 package com.example.school.validations;
 
-import com.example.school.service.annotation.PasswordValidator;
+import com.example.school.annotation.PasswordValidator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

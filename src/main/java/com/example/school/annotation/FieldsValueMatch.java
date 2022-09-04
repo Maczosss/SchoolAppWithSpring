@@ -1,4 +1,4 @@
-package com.example.school.service.annotation;
+package com.example.school.annotation;
 
 import com.example.school.validations.FieldsValueMatchValidator;
 
