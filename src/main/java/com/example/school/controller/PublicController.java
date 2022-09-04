@@ -1,7 +1,7 @@
 package com.example.school.controller;
 
 import com.example.school.model.Person;
-import com.example.school.service.PersonalService;
+import com.example.school.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import javax.validation.Valid;
 public class PublicController {
 
     @Autowired
-    PersonalService personalService;
+    PersonService personService;
 
     @RequestMapping(value = "/register", method = {RequestMethod.GET})
     public String displayRegisterPage(Model model) {
@@ -31,8 +31,13 @@ public class PublicController {
     public String createUser(@Valid @ModelAttribute("person") Person person, Errors errors) {
         if(errors.hasErrors()){
             return "register.html";
-        }else{
+        }
+        var isSaved = personService.createNewPerson(person);
+        if(isSaved){
             return "redirect:/login?register=true";
+        }
+        else{
+            return "register.html";
         }
     }
 }
