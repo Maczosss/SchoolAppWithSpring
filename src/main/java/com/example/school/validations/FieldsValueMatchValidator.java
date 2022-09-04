@@ -25,8 +25,20 @@ public class FieldsValueMatchValidator
                 .getPropertyValue(field);
         var fieldMatchValue = new BeanWrapperImpl(value)
                 .getPropertyValue(fieldMatch);
+//        if (fieldValue != null) {
+//            if(fieldValue.toString().startsWith("$2a")){
+//                return true;
+//            }else{
+//                return fieldValue.equals(fieldMatchValue);
+//            }
+//        } else {
+//            return fieldMatchValue == null;
+//        }
+
         if (fieldValue != null) {
-            return fieldValue.equals(fieldMatchValue);
+            {
+                return fieldValue.equals(fieldMatchValue);
+            }
         } else {
             return fieldMatchValue == null;
         }
