@@ -19,6 +19,8 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoringAntMatchers("/public/**")
                 .and().authorizeRequests()
                 .mvcMatchers("/dashboard").authenticated()
+                .mvcMatchers("/displayProfile").authenticated()
+                .mvcMatchers("/updateProfile").authenticated()
                 .mvcMatchers("/home").permitAll()
                 .mvcMatchers("/holidays/**").permitAll()
                 .mvcMatchers("/contact").permitAll()
