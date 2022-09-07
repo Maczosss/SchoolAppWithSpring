@@ -35,7 +35,7 @@ public class SchoolUsernamePwdAuthenticationProvider implements AuthenticationPr
                 passwordEncoder.matches(password, person.getPwd())) {
 
             return new UsernamePasswordAuthenticationToken(
-                    person.getName(), null, getGrantedAuthorities(person.getRoles())
+                    email, null, getGrantedAuthorities(person.getRoles())
             );
         } else {
             throw new BadCredentialsException("Invalid Credentials");
