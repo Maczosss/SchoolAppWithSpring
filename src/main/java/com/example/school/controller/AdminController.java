@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @Slf4j
 @Controller
 @RequestMapping("admin")
@@ -51,10 +53,46 @@ public class AdminController {
     }
 
     @RequestMapping("/displayStudents")
-    public ModelAndView displayStudents(Model model, @RequestParam int classId) {
-//        var students = schoolClassRepository.findById(classId).get().getPersons();
+    public ModelAndView displayStudents(Model model, @RequestParam int classId, HttpSession session,
+                                        @RequestParam(value = "error", required = false) String error) {
         var modelAndView = new ModelAndView("students.html");
-//        modelAndView.addObject(students);
+        var schoolClass = schoolClassRepository.findById(classId);
+        modelAndView.addObject("schoolClass", schoolClass.get());
+        modelAndView.addObject("person", new Person());
+        session.setAttribute("schoolClass", schoolClass.get());
+        if (error != null) {
+            var errorMessage = "Invalid Email entered!";
+            modelAndView.addObject("errorMessage", errorMessage);
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/addStudent")
+    public ModelAndView addStudent(Model model, @ModelAttribute("person") Person person, HttpSession session) {
+        var modelAndView = new ModelAndView();
+        var schoolClass = (SchoolClass) session.getAttribute("schoolClass");
+        var personEntity = personRepository.readByEmail(person.getEmail());
+        if (personEntity == null || !(personEntity.getPersonId() > 0)) {
+            modelAndView.setViewName("redirect:/admin/displayStudents?classId=" + schoolClass.getClassId() + "&error=true");
+            return modelAndView;
+        }
+        personEntity.setSchoolClass(schoolClass);
+        personRepository.save(personEntity);
+        schoolClass.getPersons().add(personEntity);
+        schoolClassRepository.save(schoolClass);
+        modelAndView.setViewName("redirect:/admin/displayStudents?classId=" + schoolClass.getClassId());
+        return modelAndView;
+    }
+
+    @GetMapping("/deleteStudent")
+    public ModelAndView deleteStudent(Model model, @RequestParam int personId, HttpSession session){
+        var schoolClass = (SchoolClass) session.getAttribute("schoolClass");
+        var person = personRepository.findById(personId);
+        person.get().setSchoolClass(null);
+        schoolClass.getPersons().remove(person.get());
+        var savedClass = schoolClassRepository.save(schoolClass);
+        session.setAttribute("schoolClass", savedClass);
+        var modelAndView = new ModelAndView("redirect:/admin/displayStudents?classId="+ schoolClass.getClassId());
         return modelAndView;
     }
 }

@@ -1,6 +1,8 @@
 package com.example.school.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,7 +12,8 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Slf4j
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "class")
 public class SchoolClass extends BaseEntity{

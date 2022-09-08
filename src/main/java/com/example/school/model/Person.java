@@ -3,6 +3,8 @@ package com.example.school.model;
 import com.example.school.annotation.FieldsValueMatch;
 import com.example.school.annotation.PasswordValidator;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,7 +13,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
+@Setter
 @Entity
 @FieldsValueMatch.List({
         @FieldsValueMatch(
