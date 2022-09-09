@@ -12,6 +12,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,7 +30,7 @@ import javax.validation.constraints.Size;
                 message = "Email addresses do not match."
         )
 })
-public class Person extends BaseEntity{
+public class Person extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -36,7 +38,7 @@ public class Person extends BaseEntity{
     private int personId;
 
     @NotBlank(message = "name must not be blank")
-    @Size(min=3, message = "name must be at least 3 characters long")
+    @Size(min = 3, message = "name must be at least 3 characters long")
     private String name;
 
     @NotBlank(message = "Need to provide mobile number")
@@ -57,7 +59,7 @@ public class Person extends BaseEntity{
     @PasswordValidator
     private String pwd;
 
-    @NotBlank(message = "Confirm password can't be empty" )
+    @NotBlank(message = "Confirm password can't be empty")
     @Size(min = 3, message = "Confirm passwords needs to be at least 3 chars long")
     @Transient
     private String confirmPwd;
@@ -74,4 +76,12 @@ public class Person extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "class_id", referencedColumnName = "classId", nullable = true)
     private SchoolClass schoolClass;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "person_courses",
+            joinColumns = {
+                    @JoinColumn(name = "person_id", referencedColumnName = "personId")},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "course_id", referencedColumnName = "courseId")})
+    private Set<Courses> courses = new HashSet<>();
 }
