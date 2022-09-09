@@ -50,14 +50,23 @@ public class ContactService {
         return msgPage;
     }
 
+//    public boolean updateMsgStatus(int contactId) {
+//        var isUpdated = false;
+//        var contact = contactRepository.findById(contactId);
+//        contact.ifPresent(contact1 -> {
+//            contact1.setStatus(SchoolConstants.CLOSE);
+//        });
+//        var updatedContact = contactRepository.save(contact.get());
+//        if (updatedContact.getUpdatedBy() != null) {
+//            isUpdated = true;
+//        }
+//        return isUpdated;
+//    }
+
     public boolean updateMsgStatus(int contactId) {
         var isUpdated = false;
-        Optional<Contact> contact = contactRepository.findById(contactId);
-        contact.ifPresent(contact1 -> {
-            contact1.setStatus(SchoolConstants.CLOSE);
-        });
-        var updatedContact = contactRepository.save(contact.get());
-        if (updatedContact.getUpdatedBy() != null) {
+        var rows = contactRepository.updateStatusByID(SchoolConstants.CLOSE, contactId);
+        if (rows>0) {
             isUpdated = true;
         }
         return isUpdated;
