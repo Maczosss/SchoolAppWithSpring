@@ -32,17 +32,27 @@ public class ContactController {
     @PostMapping(value = "/saveMsg")
     public String saveMessage(@Valid @ModelAttribute("contact") Contact contact, Errors errors) {
         if (errors.hasErrors()) {
-            log.error("Contact form validtion failed due to " + errors.toString());
+            log.error("Contact form validation failed due to " + errors.toString());
             return "contact.html";
         }
         contactService.saveMessageDetails(contact);
         return "redirect:/contact";
     }
 
-    @RequestMapping("/displayMessages")
-    public ModelAndView displayMessage(Model model) {
-        var contactMsgs = contactService.findMsgsWithOpenStatus();
+    @RequestMapping("/displayMessages/page/{pageNum}")
+    public ModelAndView displayMessage(Model model,
+                                       @PathVariable(name = "pageNum") int pageNum,
+                                       @RequestParam("sortField") String sortField,
+                                       @RequestParam("sortDir") String sortDir) {
+        var msgPage = contactService.findMsgsWithOpenStatus(pageNum, sortField, sortDir);
+        var contactMsgs = msgPage.getContent();
         var modelAndView = new ModelAndView("messages.html");
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", msgPage.getTotalPages());
+        model.addAttribute("totalMsgs", msgPage.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         modelAndView.addObject("contactMsgs", contactMsgs);
         return modelAndView;
 
@@ -51,6 +61,6 @@ public class ContactController {
     @RequestMapping(value = "/closeMsg", method = RequestMethod.GET)
     public String closeMsg(@RequestParam int id) {
         contactService.updateMsgStatus(id);
-        return "redirect:/displayMessages";
+        return "redirect:/displayMessages/page/1?sortField=name&sortDir=desc";
     }
 }

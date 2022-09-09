@@ -9,6 +9,7 @@ import com.example.school.repository.PersonRepository;
 import com.example.school.repository.SchoolClassRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -104,7 +105,9 @@ public class AdminController {
 
     @GetMapping("/displayCourses")
     public ModelAndView displayCourses(Model model) {
-        var courses = coursesRepository.findAll();
+//        var courses = coursesRepository.findByOrderByNameDesc(); static sorting
+        //dynamic sorting
+        var courses = coursesRepository.findAll(Sort.by("name").ascending());
         var modelAndView = new ModelAndView("courses_secure.html");
         modelAndView.addObject("courses", courses);
         modelAndView.addObject("course", new Courses());

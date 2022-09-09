@@ -5,6 +5,9 @@ import com.example.school.model.Contact;
 import com.example.school.repository.ContactRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,6 +37,17 @@ public class ContactService {
 
     public List<Contact> findMsgsWithOpenStatus() {
         return contactRepository.findByStatus(SchoolConstants.OPEN);
+    }
+
+    public Page<Contact> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
+        int pageSize = 5;
+        var pageable = PageRequest.of(pageNum - 1, pageSize,
+                sortDir.equals("asc")? Sort.by(sortField).ascending()
+                :Sort.by(sortField).descending());
+        var msgPage = contactRepository.findByStatus(
+                SchoolConstants.OPEN, pageable
+        );
+        return msgPage;
     }
 
     public boolean updateMsgStatus(int contactId) {
