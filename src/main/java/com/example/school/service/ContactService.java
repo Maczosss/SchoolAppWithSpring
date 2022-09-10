@@ -42,9 +42,10 @@ public class ContactService {
     public Page<Contact> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
         int pageSize = 5;
         var pageable = PageRequest.of(pageNum - 1, pageSize,
-                sortDir.equals("asc")? Sort.by(sortField).ascending()
-                :Sort.by(sortField).descending());
-        var msgPage = contactRepository.findByStatus(
+                sortDir.equals("asc") ? Sort.by(sortField).ascending()
+                        : Sort.by(sortField).descending());
+//        var msgPage = contactRepository.findByStatus(
+        var msgPage = contactRepository.findOpenMsgs(
                 SchoolConstants.OPEN, pageable
         );
         return msgPage;
@@ -65,8 +66,9 @@ public class ContactService {
 
     public boolean updateMsgStatus(int contactId) {
         var isUpdated = false;
-        var rows = contactRepository.updateStatusByID(SchoolConstants.CLOSE, contactId);
-        if (rows>0) {
+//        var rows = contactRepository.updateStatusByID(SchoolConstants.CLOSE, contactId);
+        var rows = contactRepository.updateMsgStatus(SchoolConstants.CLOSE, contactId);
+        if (rows > 0) {
             isUpdated = true;
         }
         return isUpdated;
