@@ -42,22 +42,36 @@ public class ContactService {
     public Page<Contact> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
         int pageSize = 5;
         var pageable = PageRequest.of(pageNum - 1, pageSize,
-                sortDir.equals("asc")? Sort.by(sortField).ascending()
-                :Sort.by(sortField).descending());
-        var msgPage = contactRepository.findByStatus(
+                sortDir.equals("asc") ? Sort.by(sortField).ascending()
+                        : Sort.by(sortField).descending());
+//        var msgPage = contactRepository.findByStatus(
+        var msgPage = contactRepository.findOpenMsgs(
+                //in native pagination can't use sorting algorithms
+//        var msgPage = contactRepository.findOpenMsgsNative(
                 SchoolConstants.OPEN, pageable
         );
         return msgPage;
     }
 
+//    public boolean updateMsgStatus(int contactId) {
+//        var isUpdated = false;
+//        var contact = contactRepository.findById(contactId);
+//        contact.ifPresent(contact1 -> {
+//            contact1.setStatus(SchoolConstants.CLOSE);
+//        });
+//        var updatedContact = contactRepository.save(contact.get());
+//        if (updatedContact.getUpdatedBy() != null) {
+//            isUpdated = true;
+//        }
+//        return isUpdated;
+//    }
+
     public boolean updateMsgStatus(int contactId) {
         var isUpdated = false;
-        Optional<Contact> contact = contactRepository.findById(contactId);
-        contact.ifPresent(contact1 -> {
-            contact1.setStatus(SchoolConstants.CLOSE);
-        });
-        var updatedContact = contactRepository.save(contact.get());
-        if (updatedContact.getUpdatedBy() != null) {
+//        var rows = contactRepository.updateStatusByID(SchoolConstants.CLOSE, contactId);
+//        var rows = contactRepository.updateMsgStatus(SchoolConstants.CLOSE, contactId);
+        var rows = contactRepository.updateMsgStatusNative(SchoolConstants.CLOSE, contactId);
+        if (rows > 0) {
             isUpdated = true;
         }
         return isUpdated;
