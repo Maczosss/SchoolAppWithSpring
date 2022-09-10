@@ -46,6 +46,8 @@ public class ContactService {
                         : Sort.by(sortField).descending());
 //        var msgPage = contactRepository.findByStatus(
         var msgPage = contactRepository.findOpenMsgs(
+                //in native pagination can't use sorting algorithms
+//        var msgPage = contactRepository.findOpenMsgsNative(
                 SchoolConstants.OPEN, pageable
         );
         return msgPage;
@@ -67,7 +69,8 @@ public class ContactService {
     public boolean updateMsgStatus(int contactId) {
         var isUpdated = false;
 //        var rows = contactRepository.updateStatusByID(SchoolConstants.CLOSE, contactId);
-        var rows = contactRepository.updateMsgStatus(SchoolConstants.CLOSE, contactId);
+//        var rows = contactRepository.updateMsgStatus(SchoolConstants.CLOSE, contactId);
+        var rows = contactRepository.updateMsgStatusNative(SchoolConstants.CLOSE, contactId);
         if (rows > 0) {
             isUpdated = true;
         }

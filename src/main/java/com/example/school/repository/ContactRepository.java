@@ -18,7 +18,8 @@ public interface ContactRepository extends CrudRepository<Contact, Integer> {
 
     List<Contact> findByStatus(String status);
 
-    @Query("SELECT c FROM Contact c WHERE c.status = :status") //working instead of findByStatus
+    @Query("SELECT c FROM Contact c WHERE c.status = :status")
+        //working instead of findByStatus
 //    @Query(value = "SELECT * FROM contact_msg c WHERE c.status = :status", nativeQuery = true) //not working
     Page<Contact> findByStatus(String status, Pageable pageable);
 
@@ -32,4 +33,12 @@ public interface ContactRepository extends CrudRepository<Contact, Integer> {
     @Transactional
     @Modifying
     int updateMsgStatus(String status, int id);
+
+    @Query(nativeQuery = true)
+    Page<Contact> findOpenMsgsNative(@Param("status") String status, Pageable pageable);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true)
+    int updateMsgStatusNative(String status, int id);
 }
