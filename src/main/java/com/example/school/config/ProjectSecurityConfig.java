@@ -16,6 +16,7 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().ignoringAntMatchers("/saveMsg")
+                .ignoringAntMatchers("/api/**")
                 .ignoringAntMatchers("/public/**")
                 .and().authorizeRequests()
                 .mvcMatchers("/dashboard").authenticated()
@@ -23,6 +24,7 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/updateProfile").authenticated()
                 .mvcMatchers("/student/**").hasRole("STUDENT")
                 .mvcMatchers("/displayMessages").hasRole("ADMIN")
+                .mvcMatchers("/api/**").authenticated()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .mvcMatchers("/home").permitAll()
                 .mvcMatchers("/holidays/**").permitAll()
