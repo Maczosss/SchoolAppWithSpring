@@ -1,5 +1,6 @@
 package com.example.school.rest;
 
+import com.example.school.constants.SchoolConstants;
 import com.example.school.model.Contact;
 import com.example.school.model.Response;
 import com.example.school.repository.ContactRepository;
@@ -53,9 +54,9 @@ public class ContactRestController {
     }
 
     @DeleteMapping("/deleteMsg")
-    public ResponseEntity<Response> deleteMsg(RequestEntity<Contact> requestEntity){
+    public ResponseEntity<Response> deleteMsg(RequestEntity<Contact> requestEntity) {
         var headers = requestEntity.getHeaders();
-        headers.forEach((key, value) ->{
+        headers.forEach((key, value) -> {
             log.info(String.format(
                     "Header: '%s' = '%s'", key, value.stream().collect(Collectors.joining("|"))
             ));
@@ -65,6 +66,28 @@ public class ContactRestController {
         var response = new Response();
         response.setStatusCode("200");
         response.setStatusMsg("Message successfully deleted");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @PatchMapping("/closeMsg")
+    public ResponseEntity<Response> closeMsg(@RequestBody Contact contactReq) {
+
+        var response = new Response();
+        var contact = contactRepository.findById(contactReq.getContactId());
+        if (contact.isPresent()) {
+            contact.get().setStatus(SchoolConstants.CLOSE);
+            contactRepository.save(contact.get());
+        } else {
+            response.setStatusCode("400");
+            response.setStatusMsg("Invalid Contact Id received");
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(response);
+        }
+        response.setStatusCode("200");
+        response.setStatusMsg("Message successfully closed");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
