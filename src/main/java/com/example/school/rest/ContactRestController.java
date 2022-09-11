@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/api/contact", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 @CrossOrigin(origins = "*")
 public class ContactRestController {
-
     @Autowired
     private ContactRepository contactRepository;
 
